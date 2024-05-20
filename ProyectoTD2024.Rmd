@@ -1,0 +1,101 @@
+---
+title: "Mini Proyecto de Análisis Exploratorio de Datos"
+author: "Jorge García Pozuelo"
+date: "2024-05-20"
+output:
+  
+  bookdown::pdf_document2:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+  html_document:
+    echo: true
+    number_sections: true
+    theme: lumen
+    toc: true
+  html_notebook:
+    echo: true
+    number_sections: true
+    toc: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+  bookdown::html_document2:
+    echo: true
+    number_sections: true
+    theme: spacelab
+    toc: true
+always_allow_html: true
+params:
+  lang: ES
+lang: "`r switch(params$lang, ES = 'es-ES', EN = 'en-US')`"
+subtitle: "Tratamiento de Datos. Grado en Ciencia de Datos- UV"
+language:
+  label:
+    fig: 'Figura '
+    tab: 'Tabla '
+    eq: 'Ecuación '
+    thm: 'Teorema '
+    lem: 'Lema '
+    def: 'Definición '
+    cor: 'Corolario '
+    prp: 'Proposición '
+    exm: 'Ejemplo '
+    exr: 'Ejercicio '
+    proof: 'Demostración. '
+    remark: 'Nota: '
+    solution: 'Solución. '
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+
+p_load(tidyverse,lubridate,stringr,knitr)
+```
+
+```{r}
+rm(list = ls())
+```
+
+
+```{r}
+lista_tickets <- list.files("data",pattern = "\\.txt$", full.names = TRUE)
+
+contenido_tickets = list()
+
+for (archivo in lista_tickets){
+  
+  contenido <- readLines(archivo, warn = FALSE,encoding = "latin1")
+  
+  contenido_tickets[[archivo]] <- contenido
+  
+}
+
+
+lista_df <- list()
+
+num_ticket <- 1
+for (archivo in names(contenido_tickets)) {
+  # Crear un nombre de variable secuencial basado en el contador
+  nombre <- paste0("ticket", num_ticket)
+  
+  # Crear el data frame
+  df <- data.frame(
+    contenido = contenido_tickets[[archivo]],
+    stringsAsFactors = FALSE
+  )
+  
+  # Asignar el data frame al entorno global
+  lista_df[[nombre]] <- df
+  
+  # Incrementar el contador
+  num_ticket <- num_ticket + 1
+}
+```
+
+
